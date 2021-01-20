@@ -1,0 +1,14 @@
+version: '3.4'
+services:
+  app:
+    build: .
+    environment:
+      MONGO_USER: someuser
+      MONGO_PASSWORD: somepassword
+      MONGO_CLUSTER: somecluster
+      FLASK_DEBUG: 1
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+    ports:
+      - "4000:4000"
