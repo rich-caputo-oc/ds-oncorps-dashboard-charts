@@ -9,13 +9,13 @@ def construct_example_endpoints(store):
     Example blueprint for reference. Each blueprint should follow this syntax.
     """
 
-    example_blueprint = Blueprint('example_blueprint', __name__)
+    example_endpoints = Blueprint('example_endpoints', __name__)
 
-    @example_blueprint.route('/example_endpoints/example_endpoint')
+    @example_endpoints.route('/example_endpoints/example_endpoint')
     @cross_origin() # CORS allow all origins all methods
     def example_endpoint():
         """ Example endpoint. """
         chart = ExampleChart(store=store, filters=request.args)
         return chart.render_chart()
 
-    return example_blueprint
+    return example_endpoints

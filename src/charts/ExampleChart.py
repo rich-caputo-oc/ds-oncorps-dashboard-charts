@@ -5,36 +5,34 @@ import plotly.io as plio
 
 from charts.BaseChart import BaseChart
 
-np.random.seed(3)
-
 class ExampleChart(BaseChart):
 
-    def get_data(self):
+    def get_data(self, symbols=['data']):
         """
         Gets data using MongoDB store.
         """
-        if self.store['universe'].has_symbol('data'):
-            return self.store['universe'].read('data').data
-        # Store some example data if being run for the first time.
-        data = pd.DataFrame(np.random.randn(100, 3), columns=['a', 'b', 'c'])
-        self.store['universe'].write('data', data)
+        data = [
+            self.store['universe'].read(s).data for s in symbols
+            if self.store['universe'].has_symbol(s)
+        ]
+        return pd.concat(data, axis=1)
 
     def create_chart(self, data):
         """ Creates chart using example data. """
         table = [
             go.Table(
                 header={
-                    'values': ['a', 'b', 'c'],
+                    'values': list(data.columns),
                     'fill': {
                         'color': self.table_header_color
                     },
                     'align': 'left'
                 },
                 cells={
-                    'values': [data.a, data.b, data.c],
-                    'align': ['left', 'left', 'right']
+                    'values': [data[c] for c in data.columns],
+                    'align': ['right' for c in data.columns]
                 },
-                columnwidth=[.1, .1, .1]
+                columnwidth=[.1 for c in data.columns]
             )
         ]
         fig = dict(data=table)

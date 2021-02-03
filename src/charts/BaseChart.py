@@ -19,10 +19,6 @@ class BaseChart(ABC):
         self.filters = filters
         self.table_header_color = table_header_color
 
-        libs = set(self.store.list_libraries())
-        if 'universe' not in libs:
-            self.store.initialize_library('universe')
-
     def render_chart(self) -> str:
         """
         Coordinates the creation of a chart and returns
