@@ -3,7 +3,7 @@ import sys
 import subprocess
 import json
 import requests
-from src.ui_builder.UserEngagementPage import UserEngagementPage
+from src.ui_builder.Page import Page
 
 UI_REPO_NAME = 'ui-dashboard-oncorps'
 HOST = "localhost:4000"
@@ -22,7 +22,7 @@ def get_chart_endpoints(host=HOST):
     chart_endpoints = []
     for endpoint in endpoints:
         sp_endpoint = endpoint[1:].split('/')
-        if len(sp_endpoint) >= 2 and sp_endpoint[0] not in ['data_endpoints', 'model_endpoints', 'static']:
+        if len(sp_endpoint) >= 2 and sp_endpoint[0] not in ['data-endpoints', 'model-endpoints', 'static']:
             chart_endpoints.append(endpoint)
     return chart_endpoints
 
@@ -40,5 +40,5 @@ if __name__ == "__main__":
             blueprints[bp].append(endpoint)
 
     for k, v in blueprints.items():
-        page = UserEngagementPage(k)
+        page = Page(k)
         page.build_page(v, path=path)

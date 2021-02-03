@@ -9,9 +9,9 @@ def construct_example_endpoints(store):
     Example blueprint for reference. Each blueprint should follow this syntax.
     """
 
-    example_endpoints = Blueprint('example_endpoints', __name__)
+    example_endpoints = Blueprint('example-endpoints', __name__)
 
-    @example_endpoints.route('/example_endpoints/example_endpoint')
+    @example_endpoints.route('/example-endpoints/example-endpoint')
     @cross_origin() # CORS allow all origins all methods
     def example_endpoint():
         """ Example endpoint. """

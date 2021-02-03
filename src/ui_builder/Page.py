@@ -1,7 +1,7 @@
 import os
 
 
-class UserEngagementPage():
+class Page():
     """ Class for building a user-engagement page. """
 
     def __init__(self, name, imports=None, html=None, scss=None, colorway=None):
@@ -107,7 +107,7 @@ class UserEngagementPage():
                   colorway: colorway,
                 }}
               }},
-              chartTitle: '{' '.join([x.capitalize() for x in endpoint.split('/')[-1].split('_')])}',
+              chartTitle: '{' '.join([x.capitalize() for x in endpoint.split('/')[-1].split('-')])}',
               endpoint: ocDataScienceBaseUrl + '{endpoint}',
               enableGlobalFiltration: true,
               renderAs: RenderType.PLOTLY,
@@ -118,7 +118,7 @@ class UserEngagementPage():
               shouldShow: true
             }}
           ]
-        }}
+        }},
         """
         return dashboard
 
@@ -199,11 +199,11 @@ class UserEngagementPage():
           tiles: [
         """
         for endpoint in endpoints:
-            page_config += self.dashboardify(endpoint) + ','
+            page_config += self.dashboardify(endpoint)
         return page_config[:-1] + ']}'
 
     def build_ts(self, endpoints):
-        c_name = ''.join([x.capitalize() for x in self.name.split('_')]) + 'Page'
+        c_name = ''.join([x.capitalize() for x in self.name.split('-')]) + 'Page'
         return f"""
         {self.imports}
 
@@ -211,7 +211,7 @@ class UserEngagementPage():
 
         export class {c_name} extends UserEngagementBasePage implements OnInit, IDashboard, OnDestroy {{
           constructor(fileManager: FileManagerService, private filterService: FilterService) {{
-            super(fileManager, 'All');
+            super(fileManager, '{' '.join([x.capitalize() for x in self.name.split('-')])}');
           }}
 
           setupPageConfiguration(): IPageConfig {{

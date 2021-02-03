@@ -9,9 +9,9 @@ def construct_data_endpoints(store):
     Blueprint for anything data related.
     """
 
-    data_endpoints = Blueprint('data_endpoints', __name__)
+    data_endpoints = Blueprint('data-endpoints', __name__)
 
-    @data_endpoints.route('/data_endpoints/etl')
+    @data_endpoints.route('/data-endpoints/etl')
     @cross_origin() # CORS allow all origins all methods
     def etl():
         """ Data endpoint. """
