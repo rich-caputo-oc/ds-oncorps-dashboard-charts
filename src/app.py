@@ -4,7 +4,7 @@ import os
 from arctic import Arctic
 from flask import Flask
 
-from blueprints.example_endpoints import construct_example_endpoints
+from blueprints.user_engagement_endpoints import construct_user_engagement_endpoints
 from blueprints.data_endpoints import construct_data_endpoints
 
 # Set up logging format
@@ -31,11 +31,11 @@ mongo_host = f"mongodb+srv://{os.getenv('MONGO_USER')}:{os.getenv('MONGO_PASSWOR
 store = Arctic(mongo_host)
 
 # Construct blueprints
-example_endpoints = construct_example_endpoints(store)
+user_engagement_endpoints = construct_user_engagement_endpoints(store)
 data_endpoints = construct_data_endpoints(store)
 
 # Register blueprints
-app.register_blueprint(example_endpoints)
+app.register_blueprint(user_engagement_endpoints)
 app.register_blueprint(data_endpoints)
 
 # Just a test endpoint
@@ -43,7 +43,7 @@ app.register_blueprint(data_endpoints)
 def index():
     return "This API is Alive"
 
-@app.route('/all_endpoints')
+@app.route('/all-endpoints')
 def all_endpoints():
     return str([str(rule) for rule in app.url_map.iter_rules()])
 

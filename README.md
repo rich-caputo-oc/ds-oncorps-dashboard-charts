@@ -6,7 +6,7 @@
 2. `docker-compose up` with optional `-d` parameter to run detached
 3. If not in a local dev environment, change `FLASK_DEBUG: 0` in `docker-compose.override.yml`
 4. Ensure `docker-compose.override.yml` contains correct MongoDB info
-5. Calls are of the form: `localhost:4000/<blueprint_name>/<endpoint_name>`
+5. Calls are of the form: `localhost:4000/<blueprint_name/sidebar_tab>/<top_tab>/<endpoint_name>`
 
 
 ### Endpoints

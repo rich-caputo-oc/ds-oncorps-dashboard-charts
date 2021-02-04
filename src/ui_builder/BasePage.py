@@ -3,7 +3,8 @@ import os
 
 class BasePage():
 
-    def __init__(self, pages, name='User Engagement'):
+    def __init__(self, pages, name='user-engagement'):
+        self.name = name
         self.page_top = """
         import { ViewChild } from "@angular/core";
         import { FilterComponent } from "src/app/shared/components/filter/components/filter/filter.component";
@@ -27,17 +28,18 @@ class BasePage():
         """
         self.page_middle = ""
         for page in pages:
+            scurr = page[1:].split('/')[1]
             self.page_middle += f"""
             {{
-              path: '../{page}',
-              label: '{' '.join([x.capitalize() for x in page.split('-')])}'
-            }}
+              path: '../{scurr}',
+              label: '{' '.join([x.capitalize() for x in scurr.split('-')])}'
+            }},
             """
         self.page_bot = f"""
                 ];
 
             this.setActiveTab(activeTabName);
-            this.setPageTitle('{self.name}');
+            this.setPageTitle('{' '.join([x.capitalize() for x in self.name.split('-')])}');
           }}
 
           /**
@@ -71,5 +73,15 @@ class BasePage():
         }}
         """
 
-    def build_page(self):
+    def build_ts(self):
         return self.page_top + self.page_middle + self.page_bot
+
+    def build_page(self, path):
+        curr_dir = path + '/base'
+        try:
+            os.mkdir(curr_dir)
+        except:
+            pass
+
+        with open(f"{curr_dir}/{self.name}-base.page.ts", 'w') as ts_file:
+            ts_file.write(self.build_ts())

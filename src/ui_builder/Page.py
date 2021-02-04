@@ -1,8 +1,7 @@
 import os
 
-
 class Page():
-    """ Class for building a user-engagement page. """
+    """ Class for building a page. """
 
     def __init__(self, name, imports=None, html=None, scss=None, colorway=None):
         self.name = name
@@ -224,13 +223,15 @@ class Page():
         }}
         """
 
-    def build_page(self, endpoints, path=os.getcwd()):
-        curr_dir = path + '/' + self.name
+    def build_page(self, endpoints, path):
+        curr_dir = path
         try:
             os.mkdir(curr_dir)
         except:
             pass
         # Save HTML file
+        print('curr_dir: ', curr_dir)
+        print('name: ', self.name)
         with open(f"{curr_dir}/{self.name}.page.html", 'w') as html_file:
             html_file.write(self.html)
         # Save SCSS file

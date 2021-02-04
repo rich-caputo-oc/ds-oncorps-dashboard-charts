@@ -3,42 +3,53 @@ import sys
 import subprocess
 import json
 import requests
-from src.ui_builder.Page import Page
+from src.ui_builder.PagesBuilder import PagesBuilder
+from src.ui_builder.SideNav import SideNav
 
-UI_REPO_NAME = 'ui-dashboard-oncorps'
+
 HOST = "localhost:4000"
+UI_REPO_NAME = 'ui-dashboard-oncorps'
+BASE_UI_LINK = "https://github.com/OnCorps/ui-dashboard-generic"
 
 
-def fetch_generic_ui(ui_repo_name=UI_REPO_NAME):
+def fetch_generic_ui(base_ui_link=BASE_UI_LINK, ui_repo_name=UI_REPO_NAME):
     if ui_repo_name not in os.listdir('..'):
         subprocess.run(
-            f"git clone https://github.com/OnCorps/ui-dashboard-generic ../{ui_repo_name}".split(' '))
+            f"git clone {base_ui_link} ../{ui_repo_name}".split(' '))
 
 
-def get_chart_endpoints(host=HOST):
-    endpoints = requests.get(f'http://{host}/all_endpoints').content
+def get_endpoints(host=HOST):
+    endpoints = requests.get(f'http://{host}/all-endpoints').content
     endpoints = endpoints.decode('utf8').replace("'", '"')
     endpoints = json.loads(endpoints)
     chart_endpoints = []
+    navs = []
     for endpoint in endpoints:
         sp_endpoint = endpoint[1:].split('/')
-        if len(sp_endpoint) >= 2 and sp_endpoint[0] not in ['data-endpoints', 'model-endpoints', 'static']:
+        if len(sp_endpoint) >= 2 and sp_endpoint[0] not in ['side-nav', 'data-endpoints', 'model-endpoints', 'filter-endpoints', 'static']:
             chart_endpoints.append(endpoint)
-    return chart_endpoints
+        if sp_endpoint[0] == 'side-nav':
+            nav = requests.get(f'http://{host}{endpoint}').content
+            nav = nav.decode('utf8').split(',')
+            navs.append(nav)
+    return chart_endpoints, sorted(navs, key=lambda x: x[-1])
+
 
 
 if __name__ == "__main__":
     fetch_generic_ui()
-    path = f'../{UI_REPO_NAME}/src/app/modules/dashboard/pages/user-engagement/pages'
-    chart_endpoints = get_chart_endpoints()
-    blueprints = {}
+    path = f'../{UI_REPO_NAME}/src/app/modules/dashboard'
+    side_nav_path = f'../{UI_REPO_NAME}/src/app/shared/components/side-nav'
+    chart_endpoints, navs = get_endpoints()
+    print(navs)
+    endpoint_dict = {}
     for endpoint in chart_endpoints:
-        bp = endpoint.split('/')[1]
-        if bp not in blueprints:
-            blueprints[bp] = [endpoint]
+        total = endpoint[1:].split('/')
+        bp = total[0]
+        tail = endpoint
+        if bp not in endpoint_dict:
+            endpoint_dict[bp] = [tail]
         else:
-            blueprints[bp].append(endpoint)
-
-    for k, v in blueprints.items():
-        page = Page(k)
-        page.build_page(v, path=path)
+            endpoint_dict[bp].append(tail)
+    PagesBuilder(endpoint_dict).build_pages(path)
+    SideNav(navs).build_page(side_nav_path)
