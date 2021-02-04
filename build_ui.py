@@ -41,7 +41,6 @@ if __name__ == "__main__":
     path = f'../{UI_REPO_NAME}/src/app/modules/dashboard'
     side_nav_path = f'../{UI_REPO_NAME}/src/app/shared/components/side-nav'
     chart_endpoints, navs = get_endpoints()
-    print(navs)
     endpoint_dict = {}
     for endpoint in chart_endpoints:
         total = endpoint[1:].split('/')
@@ -53,3 +52,4 @@ if __name__ == "__main__":
             endpoint_dict[bp].append(tail)
     PagesBuilder(endpoint_dict).build_pages(path)
     SideNav(navs).build_page(side_nav_path)
+    print("UI build complete!")

@@ -230,8 +230,6 @@ class Page():
         except:
             pass
         # Save HTML file
-        print('curr_dir: ', curr_dir)
-        print('name: ', self.name)
         with open(f"{curr_dir}/{self.name}.page.html", 'w') as html_file:
             html_file.write(self.html)
         # Save SCSS file

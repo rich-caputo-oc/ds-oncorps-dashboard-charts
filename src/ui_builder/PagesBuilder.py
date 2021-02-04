@@ -7,7 +7,6 @@ from .DashboardRouting import DashboardRouting
 class PagesBuilder():
     """ Class for abstracting the page building process. """
     def __init__(self, endpoint_dict):
-        print(os.getcwd())
         self.endpoint_dict = endpoint_dict
 
     def build_pages(self, path):
