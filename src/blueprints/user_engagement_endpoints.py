@@ -20,7 +20,7 @@ def construct_user_engagement_endpoints(store):
         Every blueprint must have this function.
         Returns tuple for side-nav html file.
         Return format must be: (link, icon, name)
-        Example: "'/user-engagement/all', 'people', 'User Engagment'"
+        Example: "'/user-engagement/all', 'people', 'User Engagement'"
 
         For more info on icons, visit: https://jossef.github.io/material-design-icons-iconfont/
         """

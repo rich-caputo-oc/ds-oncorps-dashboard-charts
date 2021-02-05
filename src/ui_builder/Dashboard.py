@@ -1,4 +1,5 @@
 import os
+import jsbeautifier
 
 class Dashboard():
 
@@ -42,5 +43,8 @@ class Dashboard():
         return self.imports + self.body
 
     def build_page(self, path):
+        opts = jsbeautifier.default_options()
+        opts.indent_size = 2
+        opts.max_preserve_newlines = 30
         with open(f"{path}/dashboard.module.ts", 'w') as ts_file:
-            ts_file.write(self.build_ts())
+            ts_file.write(jsbeautifier.beautify(self.build_ts(), opts))

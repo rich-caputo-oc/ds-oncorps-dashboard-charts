@@ -1,4 +1,5 @@
 import os
+from bs4 import BeautifulSoup
 
 class SideNav():
 
@@ -39,4 +40,4 @@ class SideNav():
         """
 
         with open(f"{path}/side-nav.component.html", 'w') as html_file:
-            html_file.write(html)
+            html_file.write(BeautifulSoup(html, 'html.parser').prettify())

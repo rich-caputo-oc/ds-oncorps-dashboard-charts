@@ -1,4 +1,7 @@
 import os
+import jsbeautifier
+import cssbeautifier
+from bs4 import BeautifulSoup
 
 class Page():
     """ Class for building a page. """
@@ -229,15 +232,20 @@ class Page():
             os.mkdir(curr_dir)
         except:
             pass
+        opts = jsbeautifier.default_options()
+        opts.indent_size = 2
+        opts.max_preserve_newlines = 30
         # Save HTML file
         with open(f"{curr_dir}/{self.name}.page.html", 'w') as html_file:
-            html_file.write(self.html)
+            html_file.write(BeautifulSoup(self.html, 'html.parser').prettify())
         # Save SCSS file
         with open(f"{curr_dir}/{self.name}.page.scss", 'w') as scss_file:
-            scss_file.write(self.scss)
+            scss_file.write(cssbeautifier.beautify(self.scss, opts))
         # Save TypeScript file
         with open(f"{curr_dir}/{self.name}.page.ts", 'w') as ts_file:
-            ts_file.write(self.build_ts(endpoints))
+            ts_file.write(jsbeautifier.beautify(self.build_ts(endpoints), opts))
+
+
 
 
 if __name__ == '__main__':

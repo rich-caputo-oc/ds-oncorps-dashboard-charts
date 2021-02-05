@@ -1,5 +1,5 @@
 import os
-
+import jsbeautifier
 
 class BasePage():
 
@@ -82,6 +82,9 @@ class BasePage():
             os.mkdir(curr_dir)
         except:
             pass
-
+        opts = jsbeautifier.default_options()
+        opts.indent_size = 2
+        opts.max_preserve_newlines = 30
         with open(f"{curr_dir}/{self.name}-base.page.ts", 'w') as ts_file:
-            ts_file.write(self.build_ts())
+            s = jsbeautifier.beautify(self.build_ts(), opts)
+            ts_file.write(s)
