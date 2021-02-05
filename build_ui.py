@@ -6,12 +6,14 @@ import requests
 import shutil
 from src.ui_builder.PagesBuilder import PagesBuilder
 from src.ui_builder.SideNav import SideNav
+from src.ui_builder.AppNamer import AppNamer
 
 
 HOST = "localhost:4000"
 UI_REPO_NAME = 'ui-dashboard-oncorps'
 BASE_UI_LINK = "https://github.com/rich-caputo-oc/ui-dashboard-oncorps"
 CLEAR_PAGES = True
+APP_NAME = 'Generic Dashboard'
 
 
 def fetch_generic_ui(base_ui_link=BASE_UI_LINK, ui_repo_name=UI_REPO_NAME):
@@ -58,4 +60,5 @@ if __name__ == "__main__":
             endpoint_dict[bp].append(tail)
     PagesBuilder(endpoint_dict, clear_pages=CLEAR_PAGES).build_pages(path)
     SideNav(navs).build_page(side_nav_path)
+    AppNamer(APP_NAME).build_pages(f'../{UI_REPO_NAME}')
     print("UI build complete!")
