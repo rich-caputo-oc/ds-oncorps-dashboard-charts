@@ -11,16 +11,21 @@ from src.ui_builder.SideNav import SideNav
 HOST = "localhost:4000"
 UI_REPO_NAME = 'ui-dashboard-oncorps'
 BASE_UI_LINK = "https://github.com/OnCorps/ui-dashboard-generic"
-CLEAR_PAGES = False
+CLEAR_PAGES = True
 
 
 def fetch_generic_ui(base_ui_link=BASE_UI_LINK, ui_repo_name=UI_REPO_NAME):
+    """
+    Looks for ui_repo_name in current super-directory.
+    Clones generic UI if not found.
+    """
     if ui_repo_name not in os.listdir('..'):
         subprocess.run(
             f"git clone {base_ui_link} ../{ui_repo_name}".split(' '))
 
 
 def get_endpoints(host=HOST):
+    """ Calls /all-enpoints endpoint and keeps charting and side-nav endpoints. """
     endpoints = requests.get(f'http://{host}/all-endpoints').content
     endpoints = endpoints.decode('utf8').replace("'", '"')
     endpoints = json.loads(endpoints)
