@@ -1,5 +1,5 @@
 import os
-from bs4 import BeautifulSoup
+from html5print import HTMLBeautifier
 
 class SideNav():
 
@@ -40,4 +40,5 @@ class SideNav():
         """
 
         with open(f"{path}/side-nav.component.html", 'w') as html_file:
-            html_file.write(BeautifulSoup(html, 'html.parser').prettify())
+            # html_file.write(HTMLBeautifier.beautify(html))
+            html_file.write(html)

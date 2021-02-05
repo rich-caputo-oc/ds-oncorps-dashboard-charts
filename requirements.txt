@@ -1,3 +1,4 @@
 jsbeautifier
 cssbeautifier
+html5print
 bs4
