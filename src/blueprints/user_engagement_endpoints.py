@@ -19,8 +19,8 @@ def construct_user_engagement_endpoints(store):
         """
         Every blueprint must have this function.
         Returns tuple for side-nav html file.
-        Return format must be: (link, icon, name)
-        Example: "'/user-engagement/all', 'people', 'User Engagement'"
+        Return format must be: link,icon,name
+        Example: "'/user-engagement/all','people','User Engagement'"
 
         For more info on icons, visit: https://jossef.github.io/material-design-icons-iconfont/
         """
@@ -39,5 +39,14 @@ def construct_user_engagement_endpoints(store):
         """ Example endpoint. """
         chart = ExampleChart(store=store, filters=request.args)
         return chart.render_chart()
+
+    @example_endpoints.route('/user-engagement/something/something')
+    @cross_origin() # CORS allow all origins all methods
+    def something():
+        """ Example endpoint. """
+        chart = ExampleChart(store=store, filters=request.args)
+        return chart.render_chart()
+
+
 
     return example_endpoints

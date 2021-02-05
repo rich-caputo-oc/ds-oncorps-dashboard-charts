@@ -10,7 +10,7 @@ from src.ui_builder.SideNav import SideNav
 
 HOST = "localhost:4000"
 UI_REPO_NAME = 'ui-dashboard-oncorps'
-BASE_UI_LINK = "https://github.com/OnCorps/ui-dashboard-generic"
+BASE_UI_LINK = "https://github.com/rich-caputo-oc/ui-dashboard-oncorps"
 CLEAR_PAGES = True
 
 
