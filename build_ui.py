@@ -11,7 +11,7 @@ from src.ui_builder.SideNav import SideNav
 HOST = "localhost:4000"
 UI_REPO_NAME = 'ui-dashboard-oncorps'
 BASE_UI_LINK = "https://github.com/OnCorps/ui-dashboard-generic"
-CLEAR_PAGES = True
+CLEAR_PAGES = False
 
 
 def fetch_generic_ui(base_ui_link=BASE_UI_LINK, ui_repo_name=UI_REPO_NAME):

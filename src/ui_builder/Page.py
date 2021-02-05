@@ -1,7 +1,9 @@
 import os
 import jsbeautifier
 import cssbeautifier
+import pprint
 from bs4 import BeautifulSoup
+
 
 class Page():
     """ Class for building a page. """
@@ -35,30 +37,30 @@ class Page():
 
         if html is None:
             html = """
-            <div class="dashboard-content">
-                <div class="dashboard-content__header">
-                  <h1>{{ pageTitle }}</h1>
+<div class="dashboard-content">
+    <div class="dashboard-content__header">
+      <h1>{{ pageTitle }}</h1>
 
-                  <oc-filter [globalChartInstances]="allCharts"></oc-filter>
-                </div>
+      <oc-filter [globalChartInstances]="allCharts"></oc-filter>
+    </div>
 
-                <nav mat-tab-nav-bar>
-                  <a mat-tab-link
-                     *ngFor="let link of navLinks"
-                     [routerLink]="link.path"
-                     [active]="link.isActive">
-                     {{link.label}}
-                  </a>
-                </nav>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link
+         *ngFor="let link of navLinks"
+         [routerLink]="link.path"
+         [active]="link.isActive">
+         {{link.label}}
+      </a>
+    </nav>
 
-                <oc-dashboard [pageConfig]="pageConfig"></oc-dashboard>
+    <oc-dashboard [pageConfig]="pageConfig"></oc-dashboard>
 
-                <div class="dashboard--actions">
-                  <button mat-raised-button (click)="clickCsvDownload()">
-                    <mat-icon>arrow_downward</mat-icon> Download as CSV
-                  </button>
-                </div>
-              </div>
+    <div class="dashboard--actions">
+      <button mat-raised-button (click)="clickCsvDownload()">
+        <mat-icon>arrow_downward</mat-icon> Download as CSV
+      </button>
+    </div>
+  </div>
             """
         if scss is None:
             scss = """
@@ -205,7 +207,8 @@ class Page():
         return page_config[:-1] + ']}'
 
     def build_ts(self, endpoints):
-        c_name = ''.join([x.capitalize() for x in self.name.split('-')]) + 'Page'
+        c_name = ''.join([x.capitalize()
+                          for x in self.name.split('-')]) + 'Page'
         return f"""
         {self.imports}
 
@@ -237,15 +240,14 @@ class Page():
         opts.max_preserve_newlines = 30
         # Save HTML file
         with open(f"{curr_dir}/{self.name}.page.html", 'w') as html_file:
-            html_file.write(BeautifulSoup(self.html, 'html.parser').prettify())
+            html_file.write(self.html)
         # Save SCSS file
         with open(f"{curr_dir}/{self.name}.page.scss", 'w') as scss_file:
             scss_file.write(cssbeautifier.beautify(self.scss, opts))
         # Save TypeScript file
         with open(f"{curr_dir}/{self.name}.page.ts", 'w') as ts_file:
-            ts_file.write(jsbeautifier.beautify(self.build_ts(endpoints), opts))
-
-
+            ts_file.write(jsbeautifier.beautify(
+                self.build_ts(endpoints), opts))
 
 
 if __name__ == '__main__':
