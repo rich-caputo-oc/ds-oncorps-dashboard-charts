@@ -19,7 +19,8 @@ APP_NAME = 'Generic Dashboard'
 def fetch_generic_ui(base_ui_link=BASE_UI_LINK, ui_repo_name=UI_REPO_NAME):
     """
     Looks for ui_repo_name in current super-directory.
-    Clones generic UI if not found.
+    Clones generic UI fro base_ui_link if not found.
+    For best practice, please use your forked version of ui-dashboard-oncorps as base_ui_link.
     """
     if ui_repo_name not in os.listdir('..'):
         subprocess.run(
