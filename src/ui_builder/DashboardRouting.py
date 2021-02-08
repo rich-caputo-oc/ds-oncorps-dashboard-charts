@@ -3,7 +3,7 @@ import jsbeautifier
 
 class DashboardRouting():
 
-    def __init__(self, endpoint_dict, redirect='example-endpoints'):
+    def __init__(self, endpoint_dict):
         """
         To be structured such that
         endpoint_dict[sidebar_tab] = <list of pages>
@@ -17,6 +17,7 @@ class DashboardRouting():
         const routes: Routes = [
         """
         for tab, page_arr in endpoint_dict.items():
+            redirect = page_arr[0][1:].split('/')[1]
             self.routes += f"""
             {{
               path: '{tab}',

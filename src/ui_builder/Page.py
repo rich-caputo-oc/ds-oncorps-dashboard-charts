@@ -8,8 +8,9 @@ from bs4 import BeautifulSoup
 class Page():
     """ Class for building a page. """
 
-    def __init__(self, name, imports=None, html=None, scss=None, colorway=None):
+    def __init__(self, name, base_name, imports=None, html=None, scss=None, colorway=None):
         self.name = name
+        self.base_name = base_name
         self.component = f"""
         @Component({{
           selector: 'app-{self.name}',
@@ -32,7 +33,9 @@ class Page():
             import { FileManagerService } from "src/app/shared/services/file-manager/file-manager.service";
             import { FilterService } from "src/app/shared/services/filter/filter.service";
             import { environment } from "src/environments/environment";
-            import { UserEngagementBasePage } from '../base/user-engagement-base.page';
+            """
+            imports += f"""
+            import {{ {''.join([x.capitalize() for x in self.base_name.split('-')]) + 'BasePage'} }} from '../base/{self.base_name}-base.page';
             """
 
         if html is None:
@@ -209,12 +212,13 @@ class Page():
     def build_ts(self, endpoints):
         c_name = ''.join([x.capitalize()
                           for x in self.name.split('-')]) + 'Page'
+        b_name = ''.join([x.capitalize() for x in self.base_name.split('-')]) + 'BasePage'
         return f"""
         {self.imports}
 
         {self.component}
 
-        export class {c_name} extends UserEngagementBasePage implements OnInit, IDashboard, OnDestroy {{
+        export class {c_name} extends {b_name} implements OnInit, IDashboard, OnDestroy {{
           constructor(fileManager: FileManagerService, private filterService: FilterService) {{
             super(fileManager, '{' '.join([x.capitalize() for x in self.name.split('-')])}');
           }}
@@ -248,10 +252,3 @@ class Page():
         with open(f"{curr_dir}/{self.name}.page.ts", 'w') as ts_file:
             ts_file.write(jsbeautifier.beautify(
                 self.build_ts(endpoints), opts))
-
-
-if __name__ == '__main__':
-    page = UserEngagementPage('all')
-    endpoints = ['/example_endpoints/example_endpoint']
-    print(page.build_ts(endpoints))
-    page.build_page(endpoints)

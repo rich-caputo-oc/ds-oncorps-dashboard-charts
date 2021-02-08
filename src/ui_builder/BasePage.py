@@ -11,8 +11,9 @@ class BasePage():
         import { IGlobalChartInstances } from "src/app/shared/components/filter/interfaces/global-chart/IGlobalChartInstances";
         import { IPageConfig } from "src/app/shared/components/shared/interfaces/page-config/IPageConfig";
         import { FileManagerService } from "src/app/shared/services/file-manager/file-manager.service";
-
-        export abstract class UserEngagementBasePage {
+        """
+        self.page_top += f"""export abstract class {''.join([x.capitalize() for x in self.name.split('-')]) + 'BasePage'} {{"""
+        self.page_top += """
           public allCharts: IGlobalChartInstances;
           public pageConfig: IPageConfig | IPageConfig[];
           public pageTitle: string;

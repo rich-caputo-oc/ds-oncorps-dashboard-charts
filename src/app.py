@@ -6,6 +6,7 @@ from flask import Flask
 
 from blueprints.user_engagement_endpoints import construct_user_engagement_endpoints
 from blueprints.data_endpoints import construct_data_endpoints
+from blueprints.another_sidebar_endpoints import construct_another_sidebar_endpoints
 
 # Set up logging format
 fmt = logging.Formatter(
@@ -33,10 +34,12 @@ store = Arctic(mongo_host)
 # Construct blueprints
 user_engagement_endpoints = construct_user_engagement_endpoints(store)
 data_endpoints = construct_data_endpoints(store)
+another_sidebar_endpoints = construct_another_sidebar_endpoints(store)
 
 # Register blueprints
 app.register_blueprint(user_engagement_endpoints)
 app.register_blueprint(data_endpoints)
+app.register_blueprint(another_sidebar_endpoints)
 
 # Just a test endpoint
 @app.route('/')

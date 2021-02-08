@@ -37,10 +37,8 @@ class PagesBuilder():
             BasePage(page_arr, name=tab).build_page(curr_dir)
             for curr_page in page_arr:
                 name = curr_page[1:].split('/')[1]
+                base_name = curr_page[1:].split('/')[0]
                 temp_path = curr_dir + '/' + name
-                Page(name).build_page([curr_page], path=temp_path)
+                Page(name, base_name).build_page([curr_page], path=temp_path)
         Dashboard(self.endpoint_dict).build_page(orig_path)
         DashboardRouting(self.endpoint_dict).build_page(orig_path)
-
-if __name__ == "__main__":
-    pb = PagesBuilder({})
