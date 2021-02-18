@@ -20,9 +20,6 @@ class Page():
         """
         ### Get page defaults if necessary ###
         if imports is None:
-            # By default, `import['k']: ['v1', ..., 'vN']`
-            # adds line
-            # `import {v1, ..., vN} from "k"` to <self.name>.page.ts file
             imports = """
             import { Component, OnDestroy, OnInit } from "@angular/core";
             import { IDashboard } from "src/app/interfaces/IDashboard";

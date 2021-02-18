@@ -40,7 +40,7 @@ def construct_another_sidebar_endpoints(store):
         chart = ExampleChart(store=store, filters=request.args)
         return chart.render_chart()
 
-    # @example_endpoints.route('/user-engagement/something/something')
+    # @example_endpoints.route('/another-sidebar/something/something')
     # @cross_origin() # CORS allow all origins all methods
     # def something():
     #     """ Example endpoint. """

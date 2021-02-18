@@ -10,13 +10,14 @@ from src.ui_builder.AppNamer import AppNamer
 
 
 HOST = "localhost:4000"
-UI_REPO_NAME = 'ui-dashboard-oncorps'
-BASE_UI_LINK = "https://github.com/rich-caputo-oc/ui-dashboard-oncorps"
+UI_REPO_NAME = 'ui-dashboard-generic'
+BASE_UI_LINK = "https://github.com/rich-caputo-oc/ui-dashboard-generic.git"
+WORKING_BRANCH = "2.x"
 CLEAR_PAGES = True
 APP_NAME = 'Generic Dashboard'
 
 
-def fetch_generic_ui(base_ui_link=BASE_UI_LINK, ui_repo_name=UI_REPO_NAME):
+def fetch_generic_ui(base_ui_link=BASE_UI_LINK, ui_repo_name=UI_REPO_NAME, working_branch=WORKING_BRANCH):
     """
     Looks for ui_repo_name in current super-directory.
     Clones generic UI fro base_ui_link if not found.
@@ -25,6 +26,10 @@ def fetch_generic_ui(base_ui_link=BASE_UI_LINK, ui_repo_name=UI_REPO_NAME):
     if ui_repo_name not in os.listdir('..'):
         subprocess.run(
             f"git clone {base_ui_link} ../{ui_repo_name}".split(' '))
+        os.chdir(f"../{ui_repo_name}")
+        subprocess.run(f"git fetch".split(' '))
+        subprocess.run(f"git checkout {working_branch}".split(' '))
+        os.chdir(f"../ds-oncorps-dashboard-charts")
 
 
 def get_endpoints(host=HOST):
