@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 class Page():
     """ Class for building a page. """
 
-    def __init__(self, name, base_name, imports=None, html=None, scss=None, colorway=None):
+    def __init__(self, name, base_name, imports=None, html=None, scss=None, colorway=None, chart_config=None):
         self.name = name
         self.base_name = base_name
         self.component = f"""
@@ -92,38 +92,45 @@ class Page():
         self.scss = scss
         self.colorway = colorway
 
-    def dashboardify(self, endpoint):
+    def dashboardify(self, endpoint, chart_config=None):
         """ Maps endpoint to dashboard-like python object. """
-        dashboard = f"""
-        {{
-          shouldShow: true,
-          cols: 2,
-          elevated: true,
-          charts: [
+        chart_title = ' '.join([x.capitalize() for x in endpoint.split('/')[-1].split('-')])
+        if chart_config is None:
+            dashboard = f"""
             {{
-              id: 1,
-              overrides: {{
-                layout: {{
-                  margin: {{
-                    t: 10
+              shouldShow: true,
+              cols: 2,
+              elevated: true,
+              charts: [
+                {{
+                  id: 1,
+                  overrides: {{
+                    layout: {{
+                      margin: {{
+                        t: 10
+                      }},
+                      title: {{}},
+                      colorway: colorway,
+                    }}
                   }},
-                  title: {{}},
-                  colorway: colorway,
+                  chartTitle: '{chartTitle}',
+                  endpoint: ocDataScienceBaseUrl + '{endpoint}',
+                  enableGlobalFiltration: true,
+                  renderAs: RenderType.PLOTLY,
+                  chartConfig: {{
+                    displayModeBar: false,
+                    responsive: true
+                  }},
+                  shouldShow: true
                 }}
-              }},
-              chartTitle: '{' '.join([x.capitalize() for x in endpoint.split('/')[-1].split('-')])}',
-              endpoint: ocDataScienceBaseUrl + '{endpoint}',
-              enableGlobalFiltration: true,
-              renderAs: RenderType.PLOTLY,
-              chartConfig: {{
-                displayModeBar: false,
-                responsive: true
-              }},
-              shouldShow: true
-            }}
-          ]
-        }},
-        """
+              ]
+            }},
+            """
+        else:
+            dashboard = chart_config
+            dashboard['charts'][0]['chartTitle'] = chart_title
+            dashboard['charts'][0]['endpoint'] = 'ocDataScienceBaseUrl' + endpoint
+            dashboard = str(dashboard).replace("'", "").replace("True", "true").replace("False", "false")
         return dashboard
 
     def build_filters(filters=None):
@@ -196,17 +203,17 @@ class Page():
     def get_component(self):
         return self.component
 
-    def get_page_config(self, endpoints):
+    def get_page_config(self, endpoints, chart_config=None):
         """ Joins each chart to build page config. """
         page_config = """
         return {
           tiles: [
         """
         for endpoint in endpoints:
-            page_config += self.dashboardify(endpoint)
+            page_config += self.dashboardify(endpoint, chart_config=chart_config)
         return page_config[:-1] + ']}'
 
-    def build_ts(self, endpoints):
+    def build_ts(self, endpoints, chart_config=None):
         c_name = ''.join([x.capitalize()
                           for x in self.name.split('-')]) + 'Page'
         b_name = ''.join([x.capitalize() for x in self.base_name.split('-')]) + 'BasePage'
@@ -224,13 +231,13 @@ class Page():
             const ocDataScienceBaseUrl = environment.ocDataScienceBaseUrl;
             const colorway = {self.colorway};
 
-            {self.get_page_config(endpoints)};
+            {self.get_page_config(endpoints, chart_config)};
           }}
             {self.build_filters()}
         }}
         """
 
-    def build_page(self, endpoints, path):
+    def build_page(self, endpoints, path, chart_config=None):
         curr_dir = path
         try:
             os.mkdir(curr_dir)
@@ -248,4 +255,4 @@ class Page():
         # Save TypeScript file
         with open(f"{curr_dir}/{self.name}.page.ts", 'w') as ts_file:
             ts_file.write(jsbeautifier.beautify(
-                self.build_ts(endpoints), opts))
+                self.build_ts(endpoints, chart_config), opts))

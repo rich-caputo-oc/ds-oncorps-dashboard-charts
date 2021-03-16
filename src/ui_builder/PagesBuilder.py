@@ -7,9 +7,10 @@ from .DashboardRouting import DashboardRouting
 
 class PagesBuilder():
     """ Class for abstracting the page building process. """
-    def __init__(self, endpoint_dict, clear_pages=False):
+    def __init__(self, endpoint_dict, chart_configs=None, clear_pages=False):
         self.endpoint_dict = endpoint_dict
         self.clear_pages = clear_pages
+        self.chart_configs = chart_configs
 
     def build_pages(self, path):
         """ Class for building out pages subfolder. """
@@ -39,6 +40,6 @@ class PagesBuilder():
                 name = curr_page[1:].split('/')[1]
                 base_name = curr_page[1:].split('/')[0]
                 temp_path = curr_dir + '/' + name
-                Page(name, base_name).build_page([curr_page], path=temp_path)
+                Page(name, base_name).build_page([curr_page], path=temp_path, chart_configs=self.chart_configs)
         Dashboard(self.endpoint_dict).build_page(orig_path)
         DashboardRouting(self.endpoint_dict).build_page(orig_path)

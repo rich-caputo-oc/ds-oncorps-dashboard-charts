@@ -8,8 +8,10 @@
 - If not in a local dev environment, change `FLASK_DEBUG: 0` in `docker-compose.override.yml`
 - Run `localhost:4000/data-endpoints/etl` to refresh data
 - Chart calls are of the form: `localhost:4000/<sidebar-tab>/<top-tab>/<endpoint-name>` (very important! `build_ui.py` relies on this). Sidebar tabs should have their own blueprints to maintain organization
+- Navigate to https://github.com/OnCorps/ui-dashboard-generic and fork it
+- In `build_ui.py`, set `BASE_UI_LINK = "https://github.com/<your-github-username>/ui-dashboard-generic.git"`. Set `WORKING_BRANCH` as necessary
 - Run `python build_ui.py` after making any changes to charting endpoints
-- Run ui container (see https://github.com/rich-caputo-oc/ui-dashboard-oncorps for more details)
+- Run ui container (see your forked ui repository README for more details)
 
 
 ### Endpoints

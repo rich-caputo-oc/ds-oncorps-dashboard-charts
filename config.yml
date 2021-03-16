@@ -1,0 +1,68 @@
+# Base config for individual charts. Can be modified within a chart
+base-chart-config:
+  colorway:
+    - '#000000'
+    - '#FFDB00'
+    - '#797878'
+    - '#2ca02c'
+    - '#d62728'
+    - '#9467bd'
+    - '#8c564b'
+    - '#e377c2'
+  charts:
+  - chartConfig:
+      displayModeBar: false
+      responsive: true
+    chartTitle:
+    enableGlobalFiltration: true
+    endpoint: ocDataScienceBaseUrl
+    id: 1
+    overrides:
+      layout:
+        colorway: colorway
+        margin:
+          t: 10
+        title: {}
+    renderAs: RenderType.PLOTLY
+    shouldShow: true
+  cols: 2
+  elevated: true
+  shouldShow: true
+
+base-decorators:
+  - cross_origin
+
+# Format Structure for Defining UI Configuration
+ui-directory:
+  side-bars:
+    user-engagement:
+      default: all
+      icon: people
+      headers:
+        example-endpoints:
+          charts:
+            example-endpoint:
+              # chart-config: base-chart-config
+              # decorators: base-decorators
+              class: ExampleChart
+        all:
+          charts:
+            all:
+              class: ExampleChart
+        something:
+          charts:
+            something:
+              class: ExampleChart
+
+    another-sidebar:
+      default: another-all
+      icon: account_box
+      headers:
+        another-all:
+          charts:
+            all-second:
+              class: ExampleChart
+        another-example-endpoints:
+          charts:
+            example-endpoint-second:
+              class: ExampleChart

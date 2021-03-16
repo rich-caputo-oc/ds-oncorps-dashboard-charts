@@ -1,0 +1,26 @@
+
+<div class="dashboard-content">
+    <div class="dashboard-content__header">
+      <h1>{{ pageTitle }}</h1>
+
+      <oc-filter [globalChartInstances]="allCharts"></oc-filter>
+    </div>
+
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link
+         *ngFor="let link of navLinks"
+         [routerLink]="link.path"
+         [active]="link.isActive">
+         {{link.label}}
+      </a>
+    </nav>
+
+    <oc-dashboard [pageConfig]="pageConfig"></oc-dashboard>
+
+    <div class="dashboard--actions">
+      <button mat-raised-button (click)="clickCsvDownload()">
+        <mat-icon>arrow_downward</mat-icon> Download as CSV
+      </button>
+    </div>
+  </div>
+            
